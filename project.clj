@@ -7,6 +7,7 @@
                  [ring-server "0.5.0"]
                  [reagent "0.7.0"]
                  [reagent-utils "0.2.1"]
+                 [re-frame "0.10.1"]
                  [ring "1.6.2"]
                  [ring/ring-defaults "0.3.1"]
                  [compojure "1.6.0"]
