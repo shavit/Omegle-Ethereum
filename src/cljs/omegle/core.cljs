@@ -4,7 +4,7 @@
               [accountant.core :as accountant]
               [goog.events :as events]
               [omegle.events]
-              [omegle.subscriptions]
+              [omegle.subs]
               [omegle.views.page-main :as page-main]
               [omegle.views.page-login :as page-login])
     (:import  [goog History]
@@ -23,6 +23,16 @@
 
 (secretary/defroute "/login" []
   (reset! page #(page-login/render)))
+
+(def history
+  (doto (History.)
+    (events/listen EventType.NAVIGATE
+      (fn [event]
+        (secretary/dispatch!
+          (.-token event))))
+    (.setEnabled true)))
+
+; TODO: Subscribe to route change
 
 ;; -------------------------
 ;; Initialize app

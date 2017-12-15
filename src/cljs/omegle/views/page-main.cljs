@@ -6,7 +6,8 @@
 (defn main-content
   []
     [:div
-      [:h2 "Index page"]
+      [:h2 (let [username @(subscribe [:username])]
+        (str "Hello " (if username username "Guest")))]
       [:div [:a {:href "/login"} "go to login page"]]
     ])
 
