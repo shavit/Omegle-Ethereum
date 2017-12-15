@@ -1,12 +1,15 @@
 (ns omegle.views.page-login
   (:require [reagent.core :as reagent]
             [re-frame.core :refer [subscribe dispatch]]
+            [secretary.core :as secretary :include-macros true]
             [omegle.views :refer [page-layout]]))
 
 (defn on-submit-form
   [event]
   (.preventDefault event)
-  (dispatch [:update-form-username]))
+  (dispatch [:update-form-username])
+  (println "Dispatch route")
+  (secretary/dispatch! "/"))
 
 (defn login-form
   []
@@ -27,7 +30,7 @@
     [:div
       [:h2 "Login"]
       (login-form)
-      [:div [:a {:href "/"} "go to main page"]]
+      [:div [:a {:href "/"} "go back"]]
     ])
 
 (defn render
