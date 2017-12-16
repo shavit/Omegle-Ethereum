@@ -19,7 +19,8 @@
   []
   [:div
     [:p "Camera"]
-    [:video {:src @(subscribe [:update-video-preview-source])}]
+    [:video {:autoPlay true
+      :src @(subscribe [:update-video-preview-source])}]
   ])
 
 (defn video-preview
