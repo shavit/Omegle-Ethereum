@@ -17,3 +17,9 @@
     ; (secretary/dispatch! "/")
     (assoc-in db [:user :username]
       (-> db :forms :username))))
+
+(reg-event-db
+  :video-preview-source
+  (fn [db [_ url]]
+    (assoc-in db [:video-preview :src]
+      url)))

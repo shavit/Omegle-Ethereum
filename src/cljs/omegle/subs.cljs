@@ -6,3 +6,8 @@
   [db _]
   (-> db :user :username))
 (reg-sub :username update-username)
+
+(defn update-video-preview-source
+  [db _]
+  (-> db :video-preview :src))
+(reg-sub :update-video-preview-source update-video-preview-source)

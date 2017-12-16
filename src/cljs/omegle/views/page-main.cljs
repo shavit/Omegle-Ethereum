@@ -3,15 +3,28 @@
             [re-frame.core :refer [subscribe dispatch]]
             [omegle.views :refer [page-layout]]))
 
+(defn start-preview
+  [params]
+  (dispatch [:video-preview-source (.createObjectURL js/window.URL params)]))
+
+(defn load-webcam
+  []
+  (.then
+    (.getUserMedia
+      (-> js/window .-navigator .-mediaDevices)
+      #js{:audio true :video true})
+    #(start-preview %)))
+
 (defn camera-preview
   []
   [:div
     [:p "Camera"]
-    [:video]
+    [:video {:src @(subscribe [:update-video-preview-source])}]
   ])
 
 (defn video-preview
   []
+  (load-webcam)
   [:div
     [:p "Preview"]
     [:video]
