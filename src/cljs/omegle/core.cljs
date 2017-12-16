@@ -32,8 +32,6 @@
           (.-token event))))
     (.setEnabled true)))
 
-; TODO: Subscribe to route change
-
 ;; -------------------------
 ;; Initialize app
 

@@ -8,7 +8,7 @@
   [event]
   (.preventDefault event)
   (dispatch [:update-form-username])
-  (println "Dispatch route")
+  (.pushState js/window.history "" "" "/")
   (secretary/dispatch! "/"))
 
 (defn login-form
