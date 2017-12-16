@@ -33,7 +33,7 @@
         (let [username @(subscribe [:username])]
           (if username
             nil
-            [:a {:href "/login"} "login"]))
+            [:a {:href "/profile"} "login"]))
       ]
       (let [username @(subscribe [:username])]
         (if username

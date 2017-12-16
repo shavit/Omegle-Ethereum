@@ -10,8 +10,12 @@
           [:tr
             [:td {:class "mui--text-title"}
               [:a {:class "mui-btn" :href "/"}
-                "Demo"]]]]
-          ]
+                "Demo"]]
+            [:td {:class "mui--text-title"}
+              [:a {:class "mui-btn" :href "/profile"}
+                "Profile"]]
+
+                ]]]
       ]])
 
 (defn page-layout

@@ -1,4 +1,4 @@
-(ns omegle.views.page-login
+(ns omegle.views.page-profile
   (:require [reagent.core :as reagent]
             [re-frame.core :refer [subscribe dispatch]]
             [secretary.core :as secretary :include-macros true]
@@ -22,15 +22,14 @@
                 :on-change #(dispatch
                   [:change-form-username (-> % .-target .-value)])}]]
       [:button {:class "mui-btn mui-btn--raised" :type "submit"}
-        "Submit"]
+        "Save"]
       ]])
 
 (defn main-content
   []
     [:div
-      [:h2 "Login"]
+      [:h2 "Profile"]
       (login-form)
-      [:div [:a {:href "/"} "go back"]]
     ])
 
 (defn render

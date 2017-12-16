@@ -6,7 +6,7 @@
               [omegle.events]
               [omegle.subs]
               [omegle.views.page-main :as page-main]
-              [omegle.views.page-login :as page-login])
+              [omegle.views.page-profile :as page-profile])
     (:import  [goog History]
               [goog.history EventType]))
 
@@ -21,8 +21,8 @@
 (secretary/defroute "/" []
   (reset! page #(page-main/render)))
 
-(secretary/defroute "/login" []
-  (reset! page #(page-login/render)))
+(secretary/defroute "/profile" []
+  (reset! page #(page-profile/render)))
 
 (def history
   (doto (History.)
