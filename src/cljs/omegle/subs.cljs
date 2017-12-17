@@ -11,3 +11,8 @@
   [db _]
   (-> db :video-preview :src))
 (reg-sub :update-video-preview-source update-video-preview-source)
+
+(defn update-tokens
+  [db _]
+  (-> db :tokens))
+(reg-sub :update-tokens update-tokens)

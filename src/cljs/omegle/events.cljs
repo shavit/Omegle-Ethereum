@@ -23,3 +23,13 @@
   (fn [db [_ url]]
     (assoc-in db [:video-preview :src]
       url)))
+
+(reg-event-db
+  :load-tokens
+  (fn [db _]
+    (assoc db :tokens 1000)))
+
+(reg-event-db
+  :update-tokens
+  (fn [db [_ v]]
+    (assoc db :tokens v)))

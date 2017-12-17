@@ -98,6 +98,7 @@
 
                    :source-paths ["env/dev/clj"]
                    :plugins [[lein-figwheel "0.5.14"]
+                             [lein-cooper "1.2.2"]
                              ]
 
                    :injections [(require 'pjstadig.humane-test-output)

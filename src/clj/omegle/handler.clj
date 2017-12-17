@@ -19,6 +19,7 @@
             :content "width=device-width, initial-scale=1"}]
 
     (include-css "https://cdn.muicss.com/mui-0.9.32/css/mui.min.css")
+    (include-css "https://fonts.googleapis.com/css?family=Nunito+Sans:700")
     (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))])
 
 (defn loading-page []
