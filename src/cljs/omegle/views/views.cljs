@@ -9,26 +9,27 @@
 (defn appbar
   []
   [:div {:class
-      (str "mui-appbar " (if logged-in
+      (str "appbar " (if logged-in
         "animate--fadeDown" ""))}
-    [:div {:class "mui-container"}
-      [:table
-        [:tbody
-          [:tr
-            [:td {:class "mui--text-title"}
-              [:a {:class "mui-btn" :href "/"}
-                "Demo"]]
-            [:td {:class "mui--text-title"}
-              [:a {:class "mui-btn" :href "/profile"}
-                "Profile"]]
-            [:td {:class "mui--text-title"}
-              [:span
-                (str (if @(subscribe [:update-tokens])
-                          @(subscribe [:update-tokens])
-                          0) " " "tokens")]]
-
-                ]]]
-      ]])
+    [:div {:class "container"}
+      [:div {:class "appbar--bar"}
+        [:nav {:class "appbar--menu"}
+          [:ul
+            [:li
+              [:a {:class "appbar--link" :href "/"}
+                "Chat"]]
+            ]]
+        [:div {:class "appbar--menu--secondary"}
+          [:span {:class "appbar--item"}
+            (str (if @(subscribe [:update-tokens])
+                      @(subscribe [:update-tokens])
+                      0) " " "tokens")]
+          [:a {:class "appbar--link" :href "/profile"}
+            (let [username @(subscribe [:username])]
+              (if username username "Profile"))]
+        ]
+      ]
+    ]])
 
 (defn page-layout
   [dom]

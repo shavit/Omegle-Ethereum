@@ -17,7 +17,7 @@
   [:div
     [:form {:class "mui-form"
             :on-submit on-submit-form}
-      [:div {:class "mui-textfield"}
+      [:div {:class "mui-textfield field"}
         [:input {:type "text"
                 :placeholder "Username"
                 :on-change #(dispatch

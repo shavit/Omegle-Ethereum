@@ -1,0 +1,72 @@
+@import "values";
+
+.appbar{
+  background-color: $ColorPrimary;
+
+  &--bar{
+    display: flex;
+    flex-direction: row;
+  }
+
+  &--item,
+  &--link{
+    display: block;
+    padding: 1em;
+  }
+
+  &--link{
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &--menu{
+    display: inline-block;
+    flex: 2;
+
+    ul{
+      display: block;
+      list-style: none;
+      margin: 0 4em 0 0;
+      padding: 0;
+
+      li{
+        display: inline-block;
+      }
+    }
+
+    &--secondary {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
+
+
+.mui-textfield{
+
+  input,
+  textarea,
+  select{
+    color: inherit;
+
+    &:focus {
+      border-color: $ColorAccent;
+    }
+  }
+
+  &.field{
+    input,
+    textarea,
+    select{
+      color: $ColorTextOnDark;
+
+      &::placeholder{
+        color: $ColorTextOnDark;
+        opacity: 0.2;
+      }
+      &:focus {
+        border-color: $ColorAccent;
+      }
+    }
+  }
+}
