@@ -3,6 +3,7 @@
 //
 // Colors
 // Measurements
+//  Fonts
 //  Time
 
 //
@@ -12,6 +13,8 @@ $ColorPrimary: #36264A;
 $ColorAccent: #FFDD00;
 
 $ColorTextOnDark: #fff;
+$ColorTextChat: #333;
+$ColorTextChatUsername: #999;
 
 $ColorPlayerBackground: #1B181F;
 
@@ -19,6 +22,11 @@ $ColorPlayerBackground: #1B181F;
 // Measurements
 //
 $MaxWidth: 58em;
+
+//
+//  Fonts
+//
+$FontChatWeight: 300;
 
 //
 //  Time

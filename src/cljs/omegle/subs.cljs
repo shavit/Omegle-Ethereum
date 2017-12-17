@@ -17,6 +17,11 @@
   (-> db :tokens))
 (reg-sub :update-tokens update-tokens)
 
+(defn form-chat-message
+  [db _]
+  (-> db :forms :chat :message))
+(reg-sub :form-chat-message form-chat-message)
+
 (defn chat-messages
   [db _]
   (-> db :chat :messages))

@@ -18,7 +18,7 @@
     [:meta {:name "viewport"
             :content "width=device-width, initial-scale=1"}]
 
-    (include-css "https://fonts.googleapis.com/css?family=Nunito+Sans:700")
+    (include-css "https://fonts.googleapis.com/css?family=Nunito+Sans")
     (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))])
 
 (defn loading-page []

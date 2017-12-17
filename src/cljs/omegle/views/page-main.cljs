@@ -18,30 +18,35 @@
 (defn on-submit-message
   [event]
   (.preventDefault event)
-  (dispatch [:update-form-chat-message]))
+  (dispatch [:update-form-chat-message])
+  (dispatch [:change-form-chat-message nil]))
 
 (defn chat-message
   [message]
-  [:div {:key (:id message)} (:body message)])
+  [:div {:key (:id message)
+    :class "chat--message"}
+    [:strong (str (:username message) ": ")]
+    [:span (:body message)]
+  ])
 
 (defn chat-box
   []
 
   [:div {:class "control--chat"}
-    [:div {:class "control--chat-messages"}
-      (let [messages @(subscribe [:chat-messages])
+    [:div {:class "control--chat--messages"}
+      (let [messages (reverse @(subscribe [:chat-messages]))
           n (count messages)]
         (for [m messages]
           (chat-message m)))
       ]
-    [:div {:class ""}
-      [:form {:class "" :on-submit on-submit-message}
-        [:input {:class "input"
-          :type "text"
-          :autoFocus true
-          :on-change #(dispatch
-            [:change-form-chat-message (-> % .-target .-value)])}]
-      ]]
+    [:form {:class "form--chat" :on-submit on-submit-message}
+      [:input {:class "form--chat--input"
+        :type "text"
+        :autoFocus true
+        :value @(subscribe [:form-chat-message])
+        :on-change #(dispatch
+          [:change-form-chat-message (-> % .-target .-value)])}]
+    ]
     ])
 
 (defn camera-preview

@@ -103,6 +103,8 @@
   &--chat {
     display: flex;
     flex-direction: row;
+    height: 420px;
+    background: $ColorPlayerBackground;
 
     .webcam--preview{
       flex: 1;
@@ -110,6 +112,42 @@
 
     .control--chat {
       flex: 2;
+      display: flex;
+      flex-direction: column;
+
+      &--messages {
+        background: $ColorTextOnDark;
+        color: $ColorTextChat;
+        flex: 2;
+        font-weight: $FontChatWeight;
+        overflow: scroll;
+
+        .chat--message {
+          padding: 0 0.25em;
+
+          strong{
+            color: $ColorTextChatUsername;
+          }
+        }
+      }
     }
+  }
+}
+
+.form--chat {
+  background: blue;
+  display: block;
+  height: 28px;
+  justify-content: flex-end;
+  position: relative;
+
+  &--input {
+    bottom: 0;
+    display: block;
+    height: 100%;
+    box-sizing: border-box;
+    outline: none;
+    position: absolute;
+    width: 100%;
   }
 }

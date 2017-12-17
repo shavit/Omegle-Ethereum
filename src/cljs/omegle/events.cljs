@@ -43,6 +43,7 @@
   [db]
   (let [messages (-> db :chat :messages)]
     {:id (if messages (count messages) 0)
+      :username (-> db :user :username)
       :body (-> db :forms :chat :message)}
       ))
 
