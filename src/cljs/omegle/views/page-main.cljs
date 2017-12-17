@@ -15,10 +15,38 @@
       #js{:audio true :video true})
     #(start-preview %)))
 
+(defn on-submit-message
+  [event]
+  (.preventDefault event)
+  (dispatch [:update-form-chat-message]))
+
+(defn chat-message
+  [message]
+  [:div {:key (:id message)} (:body message)])
+
+(defn chat-box
+  []
+
+  [:div {:class "control--chat"}
+    [:div {:class "control--chat-messages"}
+      (let [messages @(subscribe [:chat-messages])
+          n (count messages)]
+        (for [m messages]
+          (chat-message m)))
+      ]
+    [:div {:class ""}
+      [:form {:class "" :on-submit on-submit-message}
+        [:input {:class "input"
+          :type "text"
+          :autoFocus true
+          :on-change #(dispatch
+            [:change-form-chat-message (-> % .-target .-value)])}]
+      ]]
+    ])
+
 (defn camera-preview
   []
-  [:div
-    [:p "Camera"]
+  [:div {:class "video--box webcam--preview"}
     [:video {:autoPlay true
       :src @(subscribe [:update-video-preview-source])}]
   ])
@@ -26,21 +54,23 @@
 (defn video-preview
   []
   (load-webcam)
-  [:div
-    [:p "Preview"]
+  [:div {:class "video--box video--player"}
     [:video]
   ])
 
 (defn camera-view
   []
-  [:div
+  [:div {:class "video--players"}
     [video-preview]
-    [camera-preview]
+    [:div {:class "panel--chat"}
+      [camera-preview]
+      [chat-box]
+    ]
   ])
 
 (defn main-content
   []
-    [:div
+    [:div {:class "container"}
       [:h2 (let [username @(subscribe [:username])]
         (str "Hello " (if username username "Guest")))]
       [:div

@@ -33,3 +33,23 @@
   :update-tokens
   (fn [db [_ v]]
     (assoc db :tokens v)))
+
+(reg-event-db
+  :change-form-chat-message
+  (fn [db [_ v]]
+    (assoc-in db [:forms :chat :message] v)))
+
+(defn create-message
+  [db]
+  (let [messages (-> db :chat :messages)]
+    {:id (if messages (count messages) 0)
+      :body (-> db :forms :chat :message)}
+      ))
+
+(reg-event-db
+  :update-form-chat-message
+  (fn [db _]
+    (let [messages
+        (concat (-> db :chat :messages)
+        [(create-message db)])]
+      (assoc-in db [:chat :messages] messages))))

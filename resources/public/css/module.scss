@@ -70,3 +70,46 @@
     }
   }
 }
+
+.video {
+
+  &--box{
+    video {
+      background: $ColorPlayerBackground;
+    }
+  }
+
+  &--players{
+    position: relative;
+  }
+
+  &--player{
+    video {
+      width: 100%;
+    }
+  }
+}
+
+.webcam {
+  &--preview{
+    video {
+      max-width: 100%;
+    }
+  }
+}
+
+.panel {
+
+  &--chat {
+    display: flex;
+    flex-direction: row;
+
+    .webcam--preview{
+      flex: 1;
+    }
+
+    .control--chat {
+      flex: 2;
+    }
+  }
+}

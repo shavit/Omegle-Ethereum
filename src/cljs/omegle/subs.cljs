@@ -16,3 +16,8 @@
   [db _]
   (-> db :tokens))
 (reg-sub :update-tokens update-tokens)
+
+(defn chat-messages
+  [db _]
+  (-> db :chat :messages))
+(reg-sub :chat-messages chat-messages)

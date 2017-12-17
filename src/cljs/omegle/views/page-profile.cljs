@@ -20,6 +20,7 @@
       [:div {:class "mui-textfield field"}
         [:input {:type "text"
                 :placeholder "Username"
+                :autoFocus true
                 :on-change #(dispatch
                   [:change-form-username (-> % .-target .-value)])}]]
       [:button {:class "mui-btn mui-btn--raised" :type "submit"}
