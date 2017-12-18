@@ -3,13 +3,34 @@
             [re-frame.core :refer [subscribe dispatch]]
             [omegle.views :refer [page-layout]]))
 
-(defn start-webcam-preview
+
+
+(defonce tokens-clock-id (atom nil))
+(defn start-clock
   []
-  (dispatch [:start-webcam-preview])
-  (.setInterval js/window
-    (fn []
-      (dispatch [:update-tokens -1]))
-    1000))
+  (if (= @tokens-clock-id nil)
+    (do
+      (let [x
+          (.setInterval js/window
+            (fn []
+              (dispatch [:update-tokens -1]))
+            1000)]
+        (reset! tokens-clock-id x))
+      (dispatch [:set-token-counter @tokens-clock-id])))
+  )
+
+(defn check-balance
+  []
+  (println "Check balance")
+  (println @(subscribe [:update-tokens]))
+
+  (if (<= @(subscribe [:update-tokens]) 0)
+    (do
+      (println "Stopping counter")
+      (dispatch [:stop-token-counter])
+      (reset! tokens-clock-id nil)
+      ))
+  )
 
 (defn on-submit-message
   [event]
@@ -54,7 +75,7 @@
 
 (defn video-preview
   []
-  (start-webcam-preview)
+
   [:div {:class "video--box video--player"}
     [:video]
   ])
@@ -71,6 +92,10 @@
 
 (defn main-content
   []
+    (dispatch [:start-webcam-preview])
+    (start-clock)
+    (check-balance)
+
     [:div {:class "container"}
       [:h2 (let [username @(subscribe [:username])]
         (str "Hello " (if username username "Guest")))]

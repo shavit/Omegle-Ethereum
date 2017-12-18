@@ -40,10 +40,24 @@
     nil))
 
 (reg-event-db
+  :set-token-counter
+  (fn [db [_ v]]
+    (assoc db :token-counter v)))
+
+(reg-event-db
+  :stop-token-counter
+  (fn [db _]
+    (.clearInterval js/window
+      (:token-counter db) (fn []))
+    (assoc db :token-counter nil)))
+
+(reg-event-db
   :update-tokens
   (fn [db [_ v]]
-    (let [tokens (:tokens db)]
-      (assoc db :tokens (+ tokens v)))))
+    (let [tokens
+      (or (:tokens db) 0)
+      new-value (+ tokens v)]
+      (assoc db :tokens new-value))))
 
 (reg-event-db
   :change-form-chat-message

@@ -8,12 +8,14 @@
   [event]
   (.preventDefault event)
   (dispatch [:update-form-username])
-  (dispatch [:update-tokens 1000])
+  (dispatch [:update-tokens 4])
   (.pushState js/window.history "" "" "/")
   (secretary/dispatch! "/"))
 
 (defn login-form
   []
+  (dispatch [:stop-token-counter])
+
   [:div
     [:form {:class "mui-form"
             :on-submit on-submit-form}
