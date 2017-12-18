@@ -24,6 +24,11 @@
     (assoc-in db [:video-preview :src]
       url)))
 
+(reg-event-db
+  :video-player-source
+  (fn [db [_ url]]
+    (assoc db :video-player-source url)))
+
 (defn start-webcam-preview
   [stream]
   (dispatch [:video-preview-source (.createObjectURL js/window.URL stream)])

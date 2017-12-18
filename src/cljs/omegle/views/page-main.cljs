@@ -77,7 +77,9 @@
   []
 
   [:div {:class "video--box video--player"}
-    [:video]
+    [:video {:autoPlay true
+      :loop true
+      :src @(subscribe [:video-player-source])}]
   ])
 
 (defn camera-view
@@ -93,6 +95,7 @@
 (defn main-content
   []
     (dispatch [:start-webcam-preview])
+    ; (dispatch [:video-player-source ""])
     (start-clock)
     (check-balance)
 

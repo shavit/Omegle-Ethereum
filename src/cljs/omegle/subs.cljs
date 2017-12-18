@@ -12,6 +12,11 @@
   (-> db :video-preview :src))
 (reg-sub :update-video-preview-source update-video-preview-source)
 
+(defn video-player-source
+  [db _]
+  (-> db :video-player-source))
+(reg-sub :video-player-source video-player-source)
+
 (defn update-tokens
   [db _]
   (-> db :tokens))
