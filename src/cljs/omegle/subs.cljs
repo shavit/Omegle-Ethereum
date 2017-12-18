@@ -17,6 +17,11 @@
   (-> db :video-player-source))
 (reg-sub :video-player-source video-player-source)
 
+(defn token-counter-started
+  [db _]
+  (-> db :token-counter-started))
+(reg-sub :token-counter-started token-counter-started)
+
 (defn update-tokens
   [db _]
   (-> db :tokens))

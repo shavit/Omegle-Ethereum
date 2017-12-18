@@ -47,14 +47,14 @@
 (reg-event-db
   :set-token-counter
   (fn [db [_ v]]
-    (assoc db :token-counter v)))
+    (assoc db :token-counter v :token-counter-started true)))
 
 (reg-event-db
   :stop-token-counter
   (fn [db _]
     (.clearInterval js/window
       (:token-counter db) (fn []))
-    (assoc db :token-counter nil)))
+    (assoc db :token-counter nil :token-counter-started false)))
 
 (reg-event-db
   :update-tokens

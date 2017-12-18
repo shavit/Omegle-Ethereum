@@ -5,30 +5,25 @@
 
 
 
-(defonce tokens-clock-id (atom nil))
 (defn start-clock
   []
-  (if (= @tokens-clock-id nil)
-    (do
-      (let [x
-          (.setInterval js/window
-            (fn []
-              (dispatch [:update-tokens -1]))
-            1000)]
-        (reset! tokens-clock-id x))
-      (dispatch [:set-token-counter @tokens-clock-id])))
+
+  (if (= @(subscribe [:token-counter-started false]) false)
+    (let [x
+        (.setInterval js/window
+          (fn []
+            (dispatch [:update-tokens -1]))
+          1000)]
+      (dispatch [:set-token-counter x])))
   )
 
 (defn check-balance
   []
-  (println "Check balance")
   (println @(subscribe [:update-tokens]))
 
   (if (<= @(subscribe [:update-tokens]) 0)
     (do
-      (println "Stopping counter")
       (dispatch [:stop-token-counter])
-      (reset! tokens-clock-id nil)
       ))
   )
 
@@ -92,10 +87,10 @@
     ]
   ])
 
+(dispatch [:start-webcam-preview])
+(dispatch [:video-player-source "https://oql955.oloadcdn.net/dl/l/y8XvvQqO8cKrN7nh/ODREs1qrNVg/Tommy.mov.mp4?mime=true"])
 (defn main-content
   []
-    (dispatch [:start-webcam-preview])
-    ; (dispatch [:video-player-source ""])
     (start-clock)
     (check-balance)
 
