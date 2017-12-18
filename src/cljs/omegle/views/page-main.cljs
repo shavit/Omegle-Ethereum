@@ -3,17 +3,13 @@
             [re-frame.core :refer [subscribe dispatch]]
             [omegle.views :refer [page-layout]]))
 
-(defn start-preview
-  [params]
-  (dispatch [:video-preview-source (.createObjectURL js/window.URL params)]))
-
-(defn load-webcam
+(defn start-webcam-preview
   []
-  (.then
-    (.getUserMedia
-      (-> js/window .-navigator .-mediaDevices)
-      #js{:audio true :video true})
-    #(start-preview %)))
+  (dispatch [:start-webcam-preview])
+  (.setInterval js/window
+    (fn []
+      (dispatch [:update-tokens -1]))
+    1000))
 
 (defn on-submit-message
   [event]
@@ -58,7 +54,7 @@
 
 (defn video-preview
   []
-  (load-webcam)
+  (start-webcam-preview)
   [:div {:class "video--box video--player"}
     [:video]
   ])

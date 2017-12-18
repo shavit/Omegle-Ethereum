@@ -8,7 +8,7 @@
   [event]
   (.preventDefault event)
   (dispatch [:update-form-username])
-  (dispatch [:load-tokens])
+  (dispatch [:update-tokens 1000])
   (.pushState js/window.history "" "" "/")
   (secretary/dispatch! "/"))
 

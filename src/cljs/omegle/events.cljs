@@ -1,6 +1,6 @@
 (ns omegle.events
   (:require [re-frame.core :refer [reg-event-db reg-event-fx inject-cofx
-              path trim-v after debug]]
+              path trim-v after debug dispatch]]
             [secretary.core :as secretary :include-macros true]
             [omegle.db :refer [default-db omegle->local-store]]
             [cljs.spec.alpha :as spec]))
@@ -23,6 +23,21 @@
   (fn [db [_ url]]
     (assoc-in db [:video-preview :src]
       url)))
+
+(defn start-webcam-preview
+  [stream]
+  (dispatch [:video-preview-source (.createObjectURL js/window.URL stream)])
+  )
+
+(reg-event-fx
+  :start-webcam-preview
+  (fn [_ _]
+    (.then
+      (.getUserMedia
+        (-> js/window .-navigator .-mediaDevices)
+        #js{:audio false :video true})
+      #(start-webcam-preview %))
+    nil))
 
 (reg-event-db
   :update-tokens
