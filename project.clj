@@ -82,7 +82,6 @@
    :ring-handler omegle.handler/app}
 
 
-
   :profiles {:dev {:repl-options {:init-ns omegle.repl
                                   :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 
