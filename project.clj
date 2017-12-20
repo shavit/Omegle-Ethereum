@@ -13,6 +13,7 @@
                  [compojure "1.6.0"]
                  [hiccup "1.0.5"]
                  [yogthos/config "0.9"]
+                 [cljs-ajax "0.7.3"]
                  [org.clojure/clojurescript "1.9.946"
                   :scope "provided"]
                  [secretary "1.2.3"]
