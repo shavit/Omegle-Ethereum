@@ -5,7 +5,8 @@ compile_solidity:
 	solcjs src/contracts/chat.sol \
 		--overwrite --optimize --bin --abi \
 		--combined-json bin,abi src/contracts/chat.sol \
-		-o target/contracts 
+		-o resources/public/contracts
+	cat resources/public/contracts/*.abi | sed -e 's/\]\[/,/g' > resources/public/contracts/chat.json
 
 build:
 	lein cljsbuild once
