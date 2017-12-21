@@ -19,6 +19,7 @@
                  [secretary "1.2.3"]
                  [venantius/accountant "0.2.0"
                   :exclusions [org.clojure/tools.reader]]
+                 [madvas.re-frame/web3-fx "0.2.3"]
                  [cljs-web3 "0.19.0-0-7"]]
 
   :plugins [[lein-environ "1.0.2"]
