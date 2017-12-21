@@ -1,7 +1,8 @@
 (ns omegle.db
   (:require [cljs.reader]
             [cljs.spec.alpha :as spec]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [cljs-web3.core :as web3]))
 
 
 ;; ------------------------------
@@ -35,7 +36,22 @@
 ;; Default values
 
 (def default-db
-  {:title "Title here"
+  {:settings {}
+    :accounts {}
+    :m-addresses []
+    :web3 (or (aget js/window "web3")
+              (if goog.DEBUG
+                (web3/create-web3 "http://localhost:8545/")
+                (web3/create-web3 "https://morden.infura.io/metamask")))
+    :provides-web3? (or (aget js/window "web3") goog.DEBUG)
+    :contract {:name "Chat"
+              :abi nil
+              :bin nil
+              :instance nil
+              :address "0x224ef80ea04f9ddfa71230ebd9cfac4e63e71f73"}
+
+    :title "Title here"
+    :video-player-source ""
     :messages (sorted-map)
     :videos (sorted-map)})
 
@@ -43,7 +59,6 @@
 ;; localStorage
 
 (def ls-key "omegle-reframe")
-
 (defn omegle->local-store
   "Puts db into local storage"
   [params]
