@@ -96,7 +96,7 @@
   :contract/on-balance-loaded
   interceptors
   (fn [db [v]]
-    (assoc db :tokens (eth->tokens 
+    (assoc db :tokens (eth->tokens
       (-> v :balance int)))
     ))
 
@@ -126,6 +126,11 @@
         #js{:audio false :video true})
       #(start-webcam-preview %))
     nil))
+
+(reg-event-db
+  :change-form-tokens
+  (fn [db [_ v]]
+    (assoc-in db [:forms :tokens] v)))
 
 (reg-event-db
   :change-form-username

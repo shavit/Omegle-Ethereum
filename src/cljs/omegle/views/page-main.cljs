@@ -85,7 +85,7 @@
     ]
   ])
 
-; (dispatch-sync [:eth/load-account])
+(dispatch-sync [:eth/load-account])
 (dispatch [:start-webcam-preview])
 (dispatch [:video-player-source "https://openload.co/stream/ODREs1qrNVg~1513999061~46.116.0.0~r0Yoj_f2?mime=true"])
 (defn main-content
