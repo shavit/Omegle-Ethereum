@@ -14,7 +14,7 @@
   (:require-macros
             [cljs.core.async.macros :refer [go go-loop]]))
 
-(def eth-account (atom "0xf14be7852a0375fdc417e2b4174b0889a5b3abff"))
+(def eth-account (atom "0xB5B684cbD6fEa6193730556Da98cDB34d78C4Cb3"))
 
 (def interceptors [#_(when ^boolean js/goog.DEBUG debug)
                    trim-v])
@@ -69,7 +69,7 @@
           :db-path [:contract :events]
           :events [
             [contract-instance
-              :on-balance-update-id
+              :on-balance-update
               :on-balance-update
               {}
               {}
@@ -77,33 +77,42 @@
               [:log-error]]
             ]}
 
-        :web3-fx.contract/constant-fns
-         {:instance contract-instance
-          :fns [
-            [:get-balance :blockchain/balance-loaded :log-error]
+        :web3-fx.blockchain/fns
+         {:fns [
+            [contract-instance
+              :get-balance
+              []
+              [:blockchain/balance-loaded]
+              [:log-error]]
             ]}
 
           })
     ))
 
+(defn eth->tokens
+  [eth]
+  (* eth 100))
 (reg-event-db
   :contract/on-balance-loaded
-  (fn [db _]
-    (.log js/console "---> On video added")
-    ; (assoc db :videos (conj (:videos db) video))
-    db))
+  interceptors
+  (fn [db [v]]
+    (.log js/console "---> :contract/on-balance-loaded")
+    (println (-> v :balance int))
+
+    (assoc db :tokens (eth->tokens 
+      (-> v :balance int)))
+    ))
 
 (reg-event-db
   :blockchain/balance-loaded
   (fn [db [balance address]]
-    (.log js/console "---> Balance loaded")
+    (.log js/console "---> :blockchain/balance-loaded")
     (assoc-in db [:accounts address :balance] balance)))
 
 (reg-event-fx
   :log-error
   interceptors
   (fn [_ [err]]
-    (println "---> Error")
     (.error js/console err)
     ))
 
