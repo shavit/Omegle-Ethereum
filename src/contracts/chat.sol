@@ -25,7 +25,7 @@ contract Chat is Owned {
     uint created;
   }
 
-  Streamer[] public streamers;
+  Streamer[] private streamers;
 
   event onBalanceUpdate(address author, int balance);
 

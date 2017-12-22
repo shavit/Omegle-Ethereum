@@ -7,13 +7,14 @@
 (defn start-clock
   []
 
-  (if (= @(subscribe [:token-counter-started false]) false)
-    (let [x
-        (.setInterval js/window
-          (fn []
-            (dispatch [:update-tokens -1]))
-          1000)]
-      (dispatch [:set-token-counter x])))
+  (if (not (= @(subscribe [:username]) nil))
+    (if (= @(subscribe [:token-counter-started false]) false)
+      (let [x
+          (.setInterval js/window
+            (fn []
+              (dispatch [:update-tokens -1]))
+            1000)]
+        (dispatch [:set-token-counter x]))))
   )
 
 (defn check-balance
