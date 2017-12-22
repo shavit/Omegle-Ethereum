@@ -96,9 +96,6 @@
   :contract/on-balance-loaded
   interceptors
   (fn [db [v]]
-    (.log js/console "---> :contract/on-balance-loaded")
-    (println (-> v :balance int))
-
     (assoc db :tokens (eth->tokens 
       (-> v :balance int)))
     ))
