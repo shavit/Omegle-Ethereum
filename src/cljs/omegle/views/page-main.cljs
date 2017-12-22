@@ -1,8 +1,7 @@
 (ns omegle.views.page-main
   (:require [reagent.core :as reagent]
-            [re-frame.core :refer [subscribe dispatch]]
+            [re-frame.core :refer [subscribe dispatch dispatch-sync]]
             [omegle.views :refer [page-layout]]))
-
 
 
 (defn start-clock
@@ -19,7 +18,6 @@
 
 (defn check-balance
   []
-  (println @(subscribe [:update-tokens]))
 
   (if (<= @(subscribe [:update-tokens]) 0)
     (do
@@ -87,8 +85,9 @@
     ]
   ])
 
+; (dispatch-sync [:eth/load-account])
 (dispatch [:start-webcam-preview])
-(dispatch [:video-player-source "https://oql955.oloadcdn.net/dl/l/y8XvvQqO8cKrN7nh/ODREs1qrNVg/Tommy.mov.mp4?mime=true"])
+(dispatch [:video-player-source "https://openload.co/stream/ODREs1qrNVg~1513999061~46.116.0.0~r0Yoj_f2?mime=true"])
 (defn main-content
   []
     (start-clock)
