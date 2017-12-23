@@ -112,12 +112,14 @@
       (-> v :balance int)))
     ))
 
-(reg-event-fx
+(reg-event-db
   :blockchain/address-balance-loaded
   interceptors
-  (fn [db _]
-    (.log js/console "---> :blockchain/balance-loaded")
-    {}
+  (fn [db [_ address]]
+    (.log js/console "---> :blockchain/address-balance-loaded")
+    (println address)
+    (println (-> db :contract :address))
+    (assoc db :active-address address)
   ))
 
 (reg-event-fx
@@ -152,23 +154,20 @@
   (fn [{:keys [db]}]
     (println "---> :update-form-tokens")
     (println (-> db :forms :tokens))
-    (println (-> db :m-addresses))
-    (println (first (-> db :m-addresses)))
+    (println (-> db :active-address))
     (println db)
-    {:web3-fx.contract/state-fn
-      {:instance (get-in db [:contract :instance])
-        :web3 (:web3 db)
+    {:web3-fx.contract/state-fns
+      {:web3 (:web3 db)
         :db-path [:contract :transaction-receipt-filter]
-        :fn [:set-balance
-            "Set balance"
+        :fns [
+          [(-> db :contract :address)
+            :set-balance 2121
             {:gas gas-limit
-              :from (first (-> db :m-addresses))
-              :value (-> db :forms :tokens)
-              :blockchain/balance-loaded
-              :log-error}]
-        }}
-
-    {}))
+              :from (-> db :m-addresses)
+              :on-success [:blockchain/address-balance-loaded]
+              :on-error [:log-error]}]
+          ]}}
+    ))
 
 (reg-event-db
   :change-form-username
