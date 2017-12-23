@@ -15,15 +15,18 @@
             [cljs.core.async.macros :refer [go go-loop]]))
 
 (def eth-account (atom "0xB5B684cbD6fEa6193730556Da98cDB34d78C4Cb3"))
+(def gas-limit 3000)
 
 (def interceptors [#_(when ^boolean js/goog.DEBUG debug)
                    trim-v])
 
 (reg-event-fx
   :eth/load-account
-  (fn [_ _]
+  (fn [{:keys [db]} [contracts]]
 
     (.log js/console "---> Load account")
+    (.log js/console db)
+    (.log js/console contracts)
 
     (merge
       {:db default-db
@@ -36,7 +39,11 @@
       (when (:provides-web3? default-db)
         {:web3-fx.blockchain/fns
           {:web3 (:web3 default-db)
-            :fns [[web3-eth/accounts :blockchain/addresses-loaded :log-error]]}}))
+            :fns [
+              [web3-eth/accounts
+              [:blockchain/addresses-loaded]
+              [:log-error]]
+            ]}}))
     ))
 
 (reg-event-fx
@@ -44,15 +51,19 @@
   interceptors
   (fn [{:keys [db]} [addresses]]
     (.log js/console "---> Addresses loaded")
+    (println (first addresses))
     {:db (-> db
-          (assoc :m-addresses addresses)
-          (assoc-in [:new-video :address] (first addresses)))
+          (assoc db :m-addresses addresses)
+          (assoc db :active-address (first addresses)))
     :web3-fx.blockchain/balances
-      {:web3 (:web3 default-db)
+      {:web3 (:web3 db)
         :addresses addresses
         :watch? true
-      :blockchain-filter-opts "latest"
-    :dispatches [:blockchain/balance-loaded :log-error]}}
+        :db-path [:blockchain :balances]
+        :blockchain-filter-opts "latest"
+        :on-success [:blockchain/address-balance-loaded]
+        :on-error [:log-error]
+        }}
     ))
 
 (reg-event-fx
@@ -82,7 +93,7 @@
             [contract-instance
               :get-balance
               []
-              [:blockchain/balance-loaded]
+              [:blockchain/address-balance-loaded]
               [:log-error]]
             ]}
 
@@ -96,15 +107,18 @@
   :contract/on-balance-loaded
   interceptors
   (fn [db [v]]
+    (println "---> :contract/on-balance-loaded")
     (assoc db :tokens (eth->tokens
       (-> v :balance int)))
     ))
 
-(reg-event-db
-  :blockchain/balance-loaded
-  (fn [db [balance address]]
+(reg-event-fx
+  :blockchain/address-balance-loaded
+  interceptors
+  (fn [db _]
     (.log js/console "---> :blockchain/balance-loaded")
-    (assoc-in db [:accounts address :balance] balance)))
+    {}
+  ))
 
 (reg-event-fx
   :log-error
@@ -131,6 +145,30 @@
   :change-form-tokens
   (fn [db [_ v]]
     (assoc-in db [:forms :tokens] v)))
+
+(reg-event-fx
+  :update-form-tokens
+  interceptors
+  (fn [{:keys [db]}]
+    (println "---> :update-form-tokens")
+    (println (-> db :forms :tokens))
+    (println (-> db :m-addresses))
+    (println (first (-> db :m-addresses)))
+    (println db)
+    {:web3-fx.contract/state-fn
+      {:instance (get-in db [:contract :instance])
+        :web3 (:web3 db)
+        :db-path [:contract :transaction-receipt-filter]
+        :fn [:set-balance
+            "Set balance"
+            {:gas gas-limit
+              :from (first (-> db :m-addresses))
+              :value (-> db :forms :tokens)
+              :blockchain/balance-loaded
+              :log-error}]
+        }}
+
+    {}))
 
 (reg-event-db
   :change-form-username

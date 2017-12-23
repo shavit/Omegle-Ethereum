@@ -13,7 +13,8 @@
 
 (defn on-submit-form-tokens
   [event]
-  (.preventDefault event))
+  (.preventDefault event)
+  (dispatch [:update-form-tokens]))
 
 (defn login-form
   []
