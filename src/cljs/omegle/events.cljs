@@ -88,12 +88,20 @@
               {}
               [:contract/on-balance-loaded]
               [:log-error]]
+            [contract-instance
+              :on-stream-url-change
+              :on-stream-url-change
+              {}
+              {}
+              [:contract/on-stream-url-change]
+              [:log-error]]
             ]}
 
 
         :web3-fx.contract/constant-fns
           {:fns [
               [contract-instance :get-balance [:contract/get-balance-complete] [:log-error]]
+              [contract-instance :get-stream-url [:contract/get-stream-url-complete] [:log-error]]
               ]}
 
           })
@@ -161,9 +169,6 @@
   interceptors
   (fn [{:keys [db]}]
     (println "---> :update-form-tokens")
-    (println (-> db :forms :tokens))
-    (println (-> db :active-address))
-    (println db)
     {:web3-fx.contract/state-fns
       {:web3 (:web3 db)
         :db-path [:contract :transaction-receipt-filter]
@@ -197,9 +202,18 @@
       url)))
 
 (reg-event-db
-  :video-player-source
-  (fn [db [_ url]]
+  :contract/get-stream-url-complete
+  interceptors
+  (fn [db [url]]
+    (println "---> :contract/get-stream-url-complete")
     (assoc db :video-player-source url)))
+
+(reg-event-db
+  :contract/on-stream-url-change
+  interceptors
+  (fn [db [params]]
+    (println "---> :contract/on-stream-url-change")
+    (assoc db :video-player-source (:url params))))
 
 (reg-event-db
   :set-token-counter

@@ -11,11 +11,16 @@ contract Owned {
     require(msg.sender == owner);
     _;
   }
+
+  modifier onlyNotOwner {
+    require(msg.sender != owner);
+    _;
+  }
 }
 
 contract Chat is Owned {
   string public username;
-  int private balance = 0;
+  uint256 private balance = 0;
   string private streamURL;
 
   struct Streamer {
@@ -27,16 +32,28 @@ contract Chat is Owned {
 
   Streamer[] private streamers;
 
-  event onBalanceUpdate(address author, int balance);
+  event onBalanceUpdate(address author, uint256 balance);
 
-  function setBalance(int _balance) onlyOwner public {
+  function setBalance(uint256 _balance) onlyOwner public {
       balance = _balance;
 
       onBalanceUpdate(msg.sender, balance);
   }
 
-  function getBalance() view public returns (int){
+  function getBalance() view public returns (uint256){
     return balance;
+  }
+
+  // TODO: Remove this line before deployment
+  /* function buyTokens() public payable onlyNotOwner { */
+  function buyTokens(uint256 _amount) public payable {
+    require(msg.value == 0);
+
+    if (msg.sender.send(_amount) == true) {
+      var newBalance = balance + _amount;
+      balance = newBalance;
+      onBalanceUpdate(msg.sender, newBalance);
+    }
   }
 
   function addStreamer(uint _id, bytes16 _username, string _url, uint _created) public{
@@ -50,5 +67,17 @@ contract Chat is Owned {
 
   function countStreamers() view public returns (uint){
     return streamers.length;
+  }
+
+  event onStreamUrlChange(address author, string url);
+
+  function setStreamURL(string _url) onlyOwner public {
+    streamURL = _url;
+
+    onStreamUrlChange(msg.sender, _url);
+  }
+
+  function getStreamUrl() view public returns (string){
+    return streamURL;
   }
 }
