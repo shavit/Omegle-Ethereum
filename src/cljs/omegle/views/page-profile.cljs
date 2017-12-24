@@ -14,7 +14,7 @@
 (defn on-submit-form-tokens
   [event]
   (.preventDefault event)
-  (dispatch [:update-form-tokens]))
+  (dispatch [:contract/buy-tokens]))
 
 (defn login-form
   []
@@ -41,7 +41,8 @@
     [:form {:class ""
             :on-submit on-submit-form-tokens}
       [:div {:class "mui-textfield field"}
-        [:input {:type "text"
+        [:input {:type "number"
+                :step 0.0001
                 :placeholder "0.00"
                 :on-change #(dispatch
                   [:change-form-tokens (-> % .-target .-value)])}]]

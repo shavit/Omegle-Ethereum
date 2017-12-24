@@ -105,6 +105,7 @@
               ]}
 
           })
+
     ))
 
 (defn eth->tokens
@@ -115,6 +116,7 @@
   interceptors
   (fn [db [params]]
     (println "---> :contract/on-balance-loaded")
+    (println params)
     (dispatch [:update-tokens
       (eth->tokens (int (:balance params)))])
     ))
@@ -165,22 +167,32 @@
     (assoc-in db [:forms :tokens] v)))
 
 (reg-event-fx
-  :update-form-tokens
+  :contract/buy-tokens
   interceptors
   (fn [{:keys [db]}]
     (println "---> :update-form-tokens")
-    {:web3-fx.contract/state-fns
+    (println (-> db :forms :tokens))
+
+    {:web3-fx.contract/constant-fns
       {:web3 (:web3 db)
-        :db-path [:contract :transaction-receipt-filter]
         :fns [
-          [(-> db :contract :address)
-            :set-balance 2121
-            {:gas gas-limit
-              :from (-> db :m-addresses)
-              :on-success [:blockchain/address-balance-loaded]
-              :on-error [:log-error]}]
-          ]}}
+          [(-> db :contract :instance)
+            :buy-tokens
+            (-> db :forms :tokens)
+            [:buy-tokens-complete]
+            [:log-error]]
+        ]
+      }}
     ))
+
+(reg-event-fx
+  :buy-tokens-complete
+  interceptors
+  (fn [db [params]]
+    (println "---> :buy-tokens-complete")
+    (println params)
+    ; (dispatch [:update-tokens 1])
+    {}))
 
 (reg-event-db
   :change-form-username

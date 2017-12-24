@@ -48,7 +48,7 @@
               :abi nil
               :bin nil
               :instance nil
-              :address "0x8be74581d6eb4d7ffaf240fa994f5605983dd4f9"}
+              :address "0x4fff5dda042c507a79a113f5afd9b2812a63a630"}
 
     :title "Title here"
     :video-player-source ""
