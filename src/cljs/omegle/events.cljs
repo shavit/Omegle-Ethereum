@@ -15,7 +15,7 @@
             [cljs.core.async.macros :refer [go go-loop]]))
 
 (def eth-account (atom "0xB5B684cbD6fEa6193730556Da98cDB34d78C4Cb3"))
-(def gas-limit 3000)
+(def gas-limit 60000)
 
 (def interceptors [#_(when ^boolean js/goog.DEBUG debug)
                    trim-v])
