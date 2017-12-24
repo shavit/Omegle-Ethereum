@@ -70,6 +70,8 @@
   :contract/loaded
   interceptors
   (fn [{:keys [db]} [abi]]
+    ; Account: (-> db :active-address)
+    ; Contract: (-> db :contract :address)
     (.log js/console "---> Contract loaded")
     (let [web3 (:web3 db)
           contract-instance (web3-eth/contract-at web3 abi (:address (:contract db)))]
@@ -108,8 +110,8 @@
   interceptors
   (fn [db [v]]
     (println "---> :contract/on-balance-loaded")
-    (assoc db :tokens (eth->tokens
-      (-> v :balance int)))
+    (dispatch [:update-tokens
+      (eth->tokens (int v))])
     ))
 
 (reg-event-db
@@ -121,6 +123,21 @@
     (println (-> db :contract :address))
     (assoc db :active-address address)
   ))
+
+(reg-event-fx
+  :contract/get-balance
+  interceptors
+  (fn [{:keys [db]} _]
+    (.log js/console "---> :contract/get-balance")
+    {:web3-fx.contract/constant-fns
+      {:fns [
+          {:instance (-> db :contract :instance)
+            :method :get-balance
+            :on-success [:contract/on-balance-loaded]
+            :on-error [:log-error]
+          }
+          ]}}
+    ))
 
 (reg-event-fx
   :log-error
