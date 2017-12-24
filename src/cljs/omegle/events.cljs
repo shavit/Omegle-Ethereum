@@ -90,14 +90,15 @@
               [:log-error]]
             ]}
 
-        :web3-fx.blockchain/fns
-         {:fns [
-            [contract-instance
-              :get-balance
-              []
-              [:blockchain/address-balance-loaded]
-              [:log-error]]
-            ]}
+
+        :web3-fx.contract/constant-fns
+          {:fns [
+              {:instance contract-instance
+                :method :get-balance
+                :on-success [:contract/on-balance-loaded]
+                :on-error [:log-error]
+              }
+              ]}
 
           })
     ))
@@ -123,21 +124,6 @@
     (println (-> db :contract :address))
     (assoc db :active-address address)
   ))
-
-(reg-event-fx
-  :contract/get-balance
-  interceptors
-  (fn [{:keys [db]} _]
-    (.log js/console "---> :contract/get-balance")
-    {:web3-fx.contract/constant-fns
-      {:fns [
-          {:instance (-> db :contract :instance)
-            :method :get-balance
-            :on-success [:contract/on-balance-loaded]
-            :on-error [:log-error]
-          }
-          ]}}
-    ))
 
 (reg-event-fx
   :log-error

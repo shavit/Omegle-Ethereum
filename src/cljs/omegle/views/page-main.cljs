@@ -102,8 +102,6 @@
           (if username
             nil
             [:a {:href "/profile"} "login"]))
-        ; TODO: Remove this
-        [:button {:on-click #(dispatch [:contract/get-balance])} "Get Balance"]
       ]
       (let [username @(subscribe [:username])]
         (if username
