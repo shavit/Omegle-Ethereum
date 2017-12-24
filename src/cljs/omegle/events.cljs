@@ -93,7 +93,7 @@
 
         :web3-fx.contract/constant-fns
           {:fns [
-              [contract-instance :get-balance [:contract/on-balance-loaded] [:log-error]]
+              [contract-instance :get-balance [:contract/get-balance-complete] [:log-error]]
               ]}
 
           })
@@ -102,11 +102,20 @@
 (defn eth->tokens
   [eth]
   (* eth 100))
-(reg-event-db
+(reg-event-fx
   :contract/on-balance-loaded
   interceptors
-  (fn [db [v]]
+  (fn [db [params]]
     (println "---> :contract/on-balance-loaded")
+    (dispatch [:update-tokens
+      (eth->tokens (int (:balance params)))])
+    ))
+
+(reg-event-fx
+  :contract/get-balance-complete
+  interceptors
+  (fn [db [v]]
+    (println "---> :contract/get-balance-complete")
     (dispatch [:update-tokens
       (eth->tokens (int v))])
     ))
