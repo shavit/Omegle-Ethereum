@@ -93,11 +93,7 @@
 
         :web3-fx.contract/constant-fns
           {:fns [
-              {:instance contract-instance
-                :method :get-balance
-                :on-success [:contract/on-balance-loaded]
-                :on-error [:log-error]
-              }
+              [contract-instance :get-balance [:contract/on-balance-loaded] [:log-error]]
               ]}
 
           })
