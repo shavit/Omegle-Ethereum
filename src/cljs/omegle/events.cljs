@@ -108,9 +108,12 @@
 
     ))
 
+(defn tokens->eth
+  [tokens]
+  (/ tokens 1000))
 (defn eth->tokens
   [eth]
-  (* eth 100))
+  (* eth 1000))
 (reg-event-fx
   :contract/on-balance-loaded
   interceptors
@@ -172,15 +175,24 @@
   (fn [{:keys [db]}]
     (println "---> :update-form-tokens")
     (println (-> db :forms :tokens))
+    (println (tokens->eth (-> db :forms :tokens)))
 
-    {:web3-fx.contract/constant-fns
+    {:web3-fx.contract/state-fns
       {:web3 (:web3 db)
+        :db-path [:blockchain :balances]
         :fns [
           [(-> db :contract :instance)
             :buy-tokens
             (-> db :forms :tokens)
+            {:gas gas-limit
+              :gas-price 40000000000
+              :from (-> db :active-address)
+              :value (web3/to-wei
+                (tokens->eth (-> db :forms :tokens))
+                :ether)}
             [:buy-tokens-complete]
-            [:log-error]]
+            [:log-error]
+            []]
         ]
       }}
     ))

@@ -37,13 +37,13 @@
 (defn tokens-form
   []
   [:div
-    [:h2 "Buy tokens"]
+    [:h2 "Buy Chat Tokens"]
     [:form {:class ""
             :on-submit on-submit-form-tokens}
       [:div {:class "mui-textfield field"}
         [:input {:type "number"
-                :step 0.0001
-                :placeholder "0.00"
+                :step 1
+                :placeholder "1000"
                 :on-change #(dispatch
                   [:change-form-tokens (-> % .-target .-value)])}]]
       [:button {:class "mui-btn mui-btn--raised" :type "submit"}

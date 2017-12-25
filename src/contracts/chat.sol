@@ -22,6 +22,7 @@ contract Chat is Owned {
   string public username;
   uint256 private balance = 0;
   string private streamURL;
+  uint constant tokenPrice = 0.001 ether;
 
   struct Streamer {
     uint id;
@@ -47,7 +48,8 @@ contract Chat is Owned {
   // TODO: Remove this line before deployment
   /* function buyTokens() public payable onlyNotOwner { */
   function buyTokens(uint256 _amount) public payable {
-    require(msg.value == 0);
+    require(msg.value != 0);
+    require(msg.value == (_amount * tokenPrice));
 
     if (msg.sender.send(_amount) == true) {
       var newBalance = balance + _amount;
