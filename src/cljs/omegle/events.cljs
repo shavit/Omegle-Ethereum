@@ -120,8 +120,7 @@
   (fn [db [params]]
     (println "---> :contract/on-balance-loaded")
     (println params)
-    (dispatch [:update-tokens
-      (eth->tokens (int (:balance params)))])
+    (dispatch [:update-tokens (int (:balance params))])
     ))
 
 (reg-event-fx
@@ -129,8 +128,7 @@
   interceptors
   (fn [db [v]]
     (println "---> :contract/get-balance-complete")
-    (dispatch [:update-tokens
-      (eth->tokens (int v))])
+    (dispatch [:update-tokens (int v)])
     ))
 
 (reg-event-db
